@@ -24,4 +24,15 @@ movies.post('/user/:userId', (req, res) => {
   }
 });
 
+movies.get('/user/:userId', (req, res) => {
+  const userMovies = swipedMovies.get(req.params['userId']);
+
+  if (userMovies) {
+    res.status(HttpStatus.OK)
+      .send(JSON.stringify(Array.from(userMovies.values())));
+  } else {
+    res.sendStatus(HttpStatus.NOT_FOUND);
+  }
+});
+
 export default movies;
