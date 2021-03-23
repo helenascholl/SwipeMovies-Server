@@ -4,3 +4,8 @@ export interface Movie {
   description: string;
   posterUrl: string;
 }
+
+export enum SwipeDirection {
+  LEFT = 'left',
+  RIGHT = 'right'
+}
