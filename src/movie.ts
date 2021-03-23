@@ -9,3 +9,8 @@ export enum SwipeDirection {
   LEFT = 'left',
   RIGHT = 'right'
 }
+
+export interface SwipedMovie {
+  movie: Movie;
+  swipeDirection: SwipeDirection;
+}
