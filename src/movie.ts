@@ -14,3 +14,12 @@ export interface SwipedMovie {
   movie: Movie;
   swipeDirection: SwipeDirection;
 }
+
+export function isSwipedMovie(obj: any): obj is SwipedMovie {
+  return obj.movie &&
+    typeof obj.movie.id === 'number' &&
+    typeof obj.movie.title === 'string' &&
+    typeof obj.movie.description === 'string' &&
+    typeof obj.movie.posterUrl === 'string' &&
+    (obj.swipeDirection === 'left' || obj.swipeDirection === 'right');
+}
