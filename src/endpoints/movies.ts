@@ -1,6 +1,6 @@
 import express from 'express';
 import HttpStatus from 'http-status-codes';
-import { SwipedMovie, isSwipedMovie } from './movie';
+import { SwipedMovie, isSwipedMovie } from '../movie';
 
 const swipedMovies: Map<string, Map<number, SwipedMovie>> = new Map<string, Map<number, SwipedMovie>>();
 
