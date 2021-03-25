@@ -1,8 +1,8 @@
 import express from 'express';
-import movies from './movies';
+import users from './users';
 
 const api = express();
 
-api.use('/movies', movies);
+api.use('/users', users);
 
 export default api;
