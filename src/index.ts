@@ -1,7 +1,10 @@
 import express from 'express';
 import bodyParser from 'body-parser';
+import dotenv from 'dotenv';
 import api from './endpoints/api';
 import status from './endpoints/status';
+
+dotenv.config();
 
 const app = express();
 
