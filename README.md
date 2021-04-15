@@ -1,5 +1,12 @@
 # SwipeMovies-Server
 
+## Get an API Key
+
+For the application to work properly you need a
+[TMDb API Key](https://developers.themoviedb.org/3/getting-started/introduction).
+
+After obtaining your API key, paste it into `.env`.
+
 ## Start the server
 
 ### Development mode
