@@ -1,6 +1,7 @@
 import express from 'express';
 import HttpStatus from 'http-status-codes';
-import { SwipedMovie, isSwipedMovie } from '../movie';
+import { SwipedMovie, isSwipedMovie, Movie } from '../movie';
+import TmdbApi from '../tmdbApi';
 
 const swipedMovies: Map<string, Map<number, SwipedMovie>> = new Map<string, Map<number, SwipedMovie>>();
 
@@ -36,3 +37,26 @@ users.get('/:userId/movies', (req, res) => {
 });
 
 export default users;
+
+async function getNewMovies(username: string): Promise<Movie[]> {
+  if (!swipedMovies.get(username)) {
+    swipedMovies.set(username, new Map<number, SwipedMovie>());
+  }
+
+  let newMovies: Movie[] = [];
+  const moviesKeys = Array.from(TmdbApi.getInstance().movies.keys());
+  const swipedMoviesKeys = Array.from(swipedMovies.get(username)!.keys());
+
+  for (const movieId of moviesKeys) {
+    if (!swipedMoviesKeys.includes(movieId)) {
+      newMovies.push(TmdbApi.getInstance().movies.get(movieId)!);
+    }
+  }
+
+  if (newMovies.length < 10) {
+    await TmdbApi.getInstance().fetchNewMovies();
+    newMovies = await getNewMovies(username);
+  }
+
+  return newMovies;
+}
