@@ -25,7 +25,11 @@ users.post('/:userId/movies', (req, res) => {
   }
 });
 
-users.get('/:userId/movies', (req, res) => {
+users.get('/:userId/movies', async (req, res) => {
+  res.send(await getNewMovies(req.params['userId']));
+});
+
+users.get('/:userId/movies/swiped', (req, res) => {
   const userMovies = swipedMovies.get(req.params['userId']);
 
   if (userMovies) {
