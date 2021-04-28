@@ -60,8 +60,6 @@ users.get('/:userId/movies/swiped', (req, res) => {
   }
 });
 
-export default users;
-
 async function getNewMovies(username: string): Promise<Movie[]> {
   if (!swipedMovies.get(username)) {
     swipedMovies.set(username, new Map<number, SwipedMovie>());
@@ -84,3 +82,5 @@ async function getNewMovies(username: string): Promise<Movie[]> {
 
   return newMovies;
 }
+
+export default users;
