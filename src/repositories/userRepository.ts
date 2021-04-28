@@ -18,6 +18,10 @@ export default class UserRepository {
     return this.instance;
   }
 
+  public getAll(): User[] {
+    return Array.from(this.users.values());
+  }
+
   public add(user: User): User {
     user.id = this.currentId;
     this.users.set(this.currentId++, user);
