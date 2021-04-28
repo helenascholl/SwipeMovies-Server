@@ -2,10 +2,12 @@ import User from '../user';
 
 class UserRepository {
   private static instance: UserRepository;
-  private users: User[];
+  private users: Map<number, User>;
+  private currentId: number;
 
   private constructor() {
-    this.users = [];
+    this.users = new Map<number, User>();
+    this.currentId = 0;
   }
 
   public static getInstance(): UserRepository {
@@ -14,5 +16,12 @@ class UserRepository {
     }
 
     return this.instance;
+  }
+
+  public add(user: User): User {
+    user.id = this.currentId;
+    this.users.set(this.currentId++, user);
+
+    return user;
   }
 }
