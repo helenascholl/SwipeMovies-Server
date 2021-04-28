@@ -5,7 +5,7 @@ import TmdbApi from '../tmdbApi';
 
 const swipedMovies: Map<string, Map<number, SwipedMovie>> = new Map<string, Map<number, SwipedMovie>>();
 
-const users = express();
+const users = express.Router();
 
 users.post('/:userId/movies', (req, res) => {
   const userId = req.params['userId'];
