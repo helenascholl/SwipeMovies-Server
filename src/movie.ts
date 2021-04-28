@@ -21,5 +21,5 @@ export function isSwipedMovie(obj: any): obj is SwipedMovie {
     typeof obj.movie.title === 'string' &&
     typeof obj.movie.description === 'string' &&
     typeof obj.movie.posterUrl === 'string' &&
-    (obj.swipeDirection === 'left' || obj.swipeDirection === 'right');
+    (obj.swipeDirection === SwipeDirection.LEFT || obj.swipeDirection === SwipeDirection.RIGHT);
 }
