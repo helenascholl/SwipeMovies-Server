@@ -28,18 +28,19 @@ users.post('/', (req, res) => {
 });
 
 users.post('/:userId/movies/swiped', (req, res) => {
-  const userId = req.params['userId'];
+  const userId = parseInt(req.params['userId']);
 
   if (isSwipedMovie(req.body)) {
     const swipedMovie: SwipedMovie = req.body;
+    const user = repository.get(userId);
 
-    if (!swipedMovies.get(userId)) {
-      swipedMovies.set(userId, new Map<number, SwipedMovie>());
+    if (user) {
+      user.addMovie(swipedMovie);
+      res.status(HttpStatus.OK)
+        .send(swipedMovie);
+    } else {
+      res.sendStatus(HttpStatus.NOT_FOUND);
     }
-
-    swipedMovies.get(userId)!.set(swipedMovie.movie.id, swipedMovie);
-    res.status(HttpStatus.OK)
-      .send(JSON.stringify(swipedMovie));
   } else {
     res.sendStatus(HttpStatus.BAD_REQUEST);
   }
