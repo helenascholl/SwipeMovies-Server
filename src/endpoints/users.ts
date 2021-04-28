@@ -27,7 +27,7 @@ users.post('/', (req, res) => {
   }
 });
 
-users.post('/:userId/movies', (req, res) => {
+users.post('/:userId/movies/swiped', (req, res) => {
   const userId = req.params['userId'];
 
   if (isSwipedMovie(req.body)) {
