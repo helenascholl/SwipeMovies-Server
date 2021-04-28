@@ -2,10 +2,25 @@ import express from 'express';
 import HttpStatus from 'http-status-codes';
 import { SwipedMovie, isSwipedMovie, Movie } from '../movie';
 import TmdbApi from '../tmdbApi';
+import UserRepository from '../repositories/userRepository';
+import User from '../user';
 
+const repository = UserRepository.getInstance();
 const swipedMovies: Map<string, Map<number, SwipedMovie>> = new Map<string, Map<number, SwipedMovie>>();
 
 const users = express.Router();
+
+users.post('/', (req, res) => {
+  try {
+    const user = User.parse(req.body);
+    repository.add(user);
+
+    res.status(HttpStatus.OK)
+      .send(user);
+  } catch (e) {
+    res.sendStatus(HttpStatus.BAD_REQUEST);
+  }
+});
 
 users.post('/:userId/movies', (req, res) => {
   const userId = req.params['userId'];
