@@ -29,6 +29,17 @@ users.post('/', (req, res) => {
   }
 });
 
+users.get('/:userId/movies/swiped', (req, res) => {
+  const userId = parseInt(req.params['userId']);
+
+  if (userRepository.get(userId)) {
+    res.status(HttpStatus.OK)
+      .send(swipedMovieRepository.findByUserId(userId));
+  } else {
+    res.sendStatus(HttpStatus.NOT_FOUND);
+  }
+});
+
 users.post('/:userId/movies/swiped', (req, res) => {
   const user = userRepository.get(parseInt(req.params['userId']));
 
@@ -49,17 +60,6 @@ users.post('/:userId/movies/swiped', (req, res) => {
 
 users.get('/:userId/movies', async (req, res) => {
   res.send(await getNewMovies(req.params['userId']));
-});
-
-users.get('/:userId/movies/swiped', (req, res) => {
-  const userId = parseInt(req.params['userId']);
-
-  if (userRepository.get(userId)) {
-    res.status(HttpStatus.OK)
-      .send(swipedMovieRepository.findByUserId(userId));
-  } else {
-    res.sendStatus(HttpStatus.NOT_FOUND);
-  }
 });
 
 async function getNewMovies(username: string): Promise<Movie[]> {
