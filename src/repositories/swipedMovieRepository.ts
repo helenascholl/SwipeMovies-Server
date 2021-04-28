@@ -20,4 +20,16 @@ export default class SwipedMovieRepository {
     this.swipedMovies.set(swipedMovie.movie.id, swipedMovie);
     return swipedMovie;
   }
+
+  public findByUserId(userId: number): SwipedMovie[] {
+    const swipedMovies: SwipedMovie[] = [];
+
+    for (const swipedMovie of Array.from(this.swipedMovies.values())) {
+      if (swipedMovie.user.id === userId) {
+        swipedMovies.push(swipedMovie);
+      }
+    }
+
+    return swipedMovies;
+  }
 }
