@@ -28,4 +28,8 @@ export default class UserRepository {
 
     return user;
   }
+
+  public get(id: number): User | null {
+    return this.users.get(id) ?? null;
+  }
 }
