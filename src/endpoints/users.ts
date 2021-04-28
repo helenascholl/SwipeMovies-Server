@@ -1,24 +1,26 @@
 import express from 'express';
 import HttpStatus from 'http-status-codes';
-import { SwipedMovie, isSwipedMovie, Movie } from '../movie';
+import { SwipedMovie, Movie } from '../movie';
 import TmdbApi from '../tmdbApi';
 import UserRepository from '../repositories/userRepository';
+import SwipedMovieRepository from '../repositories/swipedMovieRepository';
 import User from '../user';
 
-const repository = UserRepository.getInstance();
+const swipedMovieRepository = SwipedMovieRepository.getInstance()
+const userRepository = UserRepository.getInstance();
 const swipedMovies: Map<string, Map<number, SwipedMovie>> = new Map<string, Map<number, SwipedMovie>>();
 
 const users = express.Router();
 
 users.get('/', (_, res) => {
   res.status(HttpStatus.OK)
-    .send(repository.getAll());
+    .send(userRepository.getAll());
 });
 
 users.post('/', (req, res) => {
   try {
     const user = User.parse(req.body);
-    repository.add(user);
+    userRepository.add(user);
 
     res.status(HttpStatus.OK)
       .send(user);
@@ -28,21 +30,20 @@ users.post('/', (req, res) => {
 });
 
 users.post('/:userId/movies/swiped', (req, res) => {
-  const userId = parseInt(req.params['userId']);
+  const user = userRepository.get(parseInt(req.params['userId']));
 
-  if (isSwipedMovie(req.body)) {
-    const swipedMovie: SwipedMovie = req.body;
-    const user = repository.get(userId);
+  if (user) {
+    try {
+      const swipedMovie = SwipedMovie.parse(req.body, user);
+      swipedMovieRepository.add(swipedMovie);
 
-    if (user) {
-      user.addMovie(swipedMovie);
       res.status(HttpStatus.OK)
         .send(swipedMovie);
-    } else {
-      res.sendStatus(HttpStatus.NOT_FOUND);
+    } catch (e) {
+      res.sendStatus(HttpStatus.BAD_REQUEST);
     }
   } else {
-    res.sendStatus(HttpStatus.BAD_REQUEST);
+    res.sendStatus(HttpStatus.NOT_FOUND);
   }
 });
 
@@ -51,11 +52,11 @@ users.get('/:userId/movies', async (req, res) => {
 });
 
 users.get('/:userId/movies/swiped', (req, res) => {
-  const userMovies = swipedMovies.get(req.params['userId']);
+  const userId = parseInt(req.params['userId']);
 
-  if (userMovies) {
+  if (userRepository.get(userId)) {
     res.status(HttpStatus.OK)
-      .send(JSON.stringify(Array.from(userMovies.values())));
+      .send(swipedMovieRepository.findByUserId(userId));
   } else {
     res.sendStatus(HttpStatus.NOT_FOUND);
   }
