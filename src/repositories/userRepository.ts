@@ -1,6 +1,6 @@
 import User from '../user';
 
-class UserRepository {
+export default class UserRepository {
   private static instance: UserRepository;
   private users: Map<number, User>;
   private currentId: number;
