@@ -10,6 +10,11 @@ const swipedMovies: Map<string, Map<number, SwipedMovie>> = new Map<string, Map<
 
 const users = express.Router();
 
+users.get('/', (_, res) => {
+  res.status(HttpStatus.OK)
+    .send(repository.getAll());
+});
+
 users.post('/', (req, res) => {
   try {
     const user = User.parse(req.body);
