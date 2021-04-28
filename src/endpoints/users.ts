@@ -17,9 +17,9 @@ users.post('/:userId/movies', (req, res) => {
       swipedMovies.set(userId, new Map<number, SwipedMovie>());
     }
 
-        swipedMovies.get(userId)!.set(swipedMovie.movie.id, swipedMovie);
-        res.status(HttpStatus.OK)
-          .send(JSON.stringify(swipedMovie));
+    swipedMovies.get(userId)!.set(swipedMovie.movie.id, swipedMovie);
+    res.status(HttpStatus.OK)
+      .send(JSON.stringify(swipedMovie));
   } else {
     res.sendStatus(HttpStatus.BAD_REQUEST);
   }
