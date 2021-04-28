@@ -1,14 +1,15 @@
 import { SwipedMovie } from './movie';
+import SwipedMovieRepository from './repositories/swipedMovieRepository';
 
 export default class User {
   public id: number;
   public username: string;
-  private swipedMovies: Map<number, SwipedMovie>;
+  private swipedMovieRepository: SwipedMovieRepository;
 
   constructor(id: number, username: string) {
     this.id = id;
     this.username = username;
-    this.swipedMovies = new Map<number, SwipedMovie>();
+    this.swipedMovieRepository = SwipedMovieRepository.getInstance();
   }
 
   public static parse(obj: any): User {
@@ -23,7 +24,7 @@ export default class User {
     }
   }
 
-  public addMovie(swipedMovie: SwipedMovie) {
-    this.swipedMovies.set(swipedMovie.movie.id, swipedMovie);
+  public addMovie(swipedMovie: SwipedMovie): SwipedMovie {
+    return this.swipedMovieRepository.add(swipedMovie);
   }
 }
