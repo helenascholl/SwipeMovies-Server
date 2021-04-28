@@ -4,6 +4,7 @@ import UserRepository from '../../repositories/userRepository';
 import User from '../../user';
 import movies from './movies';
 import swipedMovies from './swipedMovies';
+import groups from './groups';
 
 const repository = UserRepository.getInstance();
 
@@ -11,6 +12,7 @@ const users = express.Router();
 
 users.use('/', movies);
 users.use('/', swipedMovies);
+users.use('/', groups);
 
 users.get('/', (_, res) => {
   res.status(HttpStatus.OK)
