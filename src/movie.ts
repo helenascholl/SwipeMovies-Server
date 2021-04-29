@@ -24,7 +24,7 @@ export class SwipedMovie {
       title: title,
       description: description,
       posterUrl: posterUrl
-    }
+    };
     this.swipeDirection = swipeDirection;
     this.user = user;
   }
