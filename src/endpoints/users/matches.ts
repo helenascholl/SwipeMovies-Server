@@ -26,7 +26,7 @@ matches.get('/:userId/matches', async (req, res) => {
 });
 
 function getMatches(user: User): Match[] {
-  const matches: Match[] = [];
+  const matches = new Map<number, Match>();
   const users: User[] = [];
   const groups = userGroupRepository.findGroupsByUserId(user.id);
   const swipedMovies = swipedMovieRepository.findByUserId(user.id);
@@ -57,16 +57,22 @@ function getMatches(user: User): Match[] {
           && groupUserSwipedMovie.swipeDirection === SwipeDirection.RIGHT
           && swipedMovie.swipeDirection === SwipeDirection.RIGHT
         ) {
-          matches.push({
-            movie: swipedMovie.movie,
-            user: groupUser
-          });
+          const match = matches.get(swipedMovie.movie.id);
+
+          if (!match) {
+            matches.set(swipedMovie.movie.id, {
+              movie: swipedMovie.movie,
+              users: [user]
+            });
+          } else {
+            match.users.push(groupUser);
+          }
         }
       }
     }
   }
 
-  return matches;
+  return Array.from(matches.values());
 }
 
 export default matches;
