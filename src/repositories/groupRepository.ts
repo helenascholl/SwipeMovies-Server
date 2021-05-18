@@ -22,11 +22,11 @@ export default class GroupRepository {
     return Array.from(this.groups.values());
   }
 
-  public add(user: Group): Group {
-    user.id = this.currentId;
-    this.groups.set(this.currentId++, user);
+  public add(group: Group): Group {
+    group.id = this.currentId;
+    this.groups.set(this.currentId++, group);
 
-    return user;
+    return group;
   }
 
   public get(id: number): Group | null {
