@@ -46,3 +46,8 @@ export class SwipedMovie {
     }
   }
 }
+
+export interface Match {
+  movie: Movie,
+  user: User
+}
