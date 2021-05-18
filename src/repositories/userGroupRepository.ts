@@ -18,10 +18,20 @@ export default class UserGroupRepository {
   }
 
   public add(user: User, group: Group): void {
-    this.userGroups.push({
-      user: user,
-      group: group
-    });
+    let isAlreadyInGroup = false;
+
+    for (const userGroup of this.userGroups) {
+      if (userGroup.user.id === user.id && userGroup.group.id === group.id) {
+        isAlreadyInGroup = true;
+      }
+    }
+
+    if (!isAlreadyInGroup) {
+      this.userGroups.push({
+        user: user,
+        group: group
+      });
+    }
   }
 
   public findGroupsByUserId(userId: number): Group[] {
