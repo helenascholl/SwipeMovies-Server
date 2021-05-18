@@ -2,10 +2,10 @@ import { SwipedMovie } from '../movie';
 
 export default class SwipedMovieRepository {
   private static instance: SwipedMovieRepository;
-  private swipedMovies: Map<number, SwipedMovie>;
+  private swipedMovies: Map<number, Map<number, SwipedMovie>>
 
   private constructor() {
-    this.swipedMovies = new Map<number, SwipedMovie>();
+    this.swipedMovies = new Map<number, Map<number, SwipedMovie>>();
   }
 
   public static getInstance(): SwipedMovieRepository {
@@ -17,17 +17,20 @@ export default class SwipedMovieRepository {
   }
 
   public add(swipedMovie: SwipedMovie): SwipedMovie {
-    this.swipedMovies.set(swipedMovie.movie.id, swipedMovie);
+    if (!this.swipedMovies.get(swipedMovie.user.id)) {
+      this.swipedMovies.set(swipedMovie.user.id, new Map<number, SwipedMovie>());
+    }
+
+    this.swipedMovies.get(swipedMovie.user.id)!.set(swipedMovie.movie.id, swipedMovie);
+
     return swipedMovie;
   }
 
   public findByUserId(userId: number): SwipedMovie[] {
     const swipedMovies: SwipedMovie[] = [];
 
-    for (const swipedMovie of Array.from(this.swipedMovies.values())) {
-      if (swipedMovie.user.id === userId) {
-        swipedMovies.push(swipedMovie);
-      }
+    if (this.swipedMovies.get(userId)) {
+      swipedMovies.push(... Array.from(this.swipedMovies.get(userId)!.values()));
     }
 
     return swipedMovies;
