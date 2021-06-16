@@ -28,12 +28,12 @@ export default class UserGroupRepository {
     }
 
     if (!isAlreadyInGroup) {
-      this.writeToFile();
-
       this.userGroups.push({
         user: user,
         group: group
       });
+
+      this.writeToFile();
     }
   }
 
