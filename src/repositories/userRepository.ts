@@ -1,13 +1,15 @@
 import User from '../user';
+import RepositoryBase from './repositoryBase';
 
-export default class UserRepository {
+export default class UserRepository extends RepositoryBase<User> {
   private static instance: UserRepository;
   private users: Map<number, User>;
   private currentId: number;
 
   private constructor() {
-    this.users = new Map<number, User>();
-    this.currentId = 0;
+    super();
+    this.users = this.parseJsonFile('src/data/users.json');
+    this.currentId = this.users.size;
   }
 
   public static getInstance(): UserRepository {
@@ -25,6 +27,8 @@ export default class UserRepository {
   public add(user: User): User {
     user.id = this.currentId;
     this.users.set(this.currentId++, user);
+
+    this.writeToFile(Array.from(this.users.values()), 'src/data/users.json');
 
     return user;
   }
