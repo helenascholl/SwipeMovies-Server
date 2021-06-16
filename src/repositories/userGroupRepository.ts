@@ -1,12 +1,13 @@
 import User from '../user';
 import Group from '../group';
+import fs from 'fs';
 
 export default class UserGroupRepository {
   private static instance: UserGroupRepository;
   private readonly userGroups: { user: User, group: Group }[];
 
   private constructor() {
-    this.userGroups = [];
+    this.userGroups = this.parseJsonFile();
   }
 
   public static getInstance(): UserGroupRepository {
@@ -27,6 +28,8 @@ export default class UserGroupRepository {
     }
 
     if (!isAlreadyInGroup) {
+      this.writeToFile();
+
       this.userGroups.push({
         user: user,
         group: group
@@ -56,5 +59,22 @@ export default class UserGroupRepository {
     }
 
     return users;
+  }
+
+  private parseJsonFile(): { user: User, group: Group }[] {
+    const data = fs.readFileSync('src/data/userGroups.json', { encoding: 'utf-8' });
+    return JSON.parse(data) as { user: User, group: Group }[];
+  }
+
+  private writeToFile(): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      fs.writeFile('src/data/userGroups.json', JSON.stringify(this.userGroups, null, 2), err => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
+    });
   }
 }
