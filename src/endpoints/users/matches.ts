@@ -62,7 +62,7 @@ function getMatches(user: User): Match[] {
           if (!match) {
             matches.set(swipedMovie.movie.id, {
               movie: swipedMovie.movie,
-              users: [user]
+              users: [groupUser]
             });
           } else {
             match.users.push(groupUser);
